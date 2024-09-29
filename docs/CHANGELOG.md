@@ -7,6 +7,14 @@
 ### Fixes
 
 - Fix bigger test icons
+- Improve some icons' colors in Light themes
+- Use a better API for the "Old Toolbar" action
+- Add some optimizations
+
+### Other
+
+- Add more UI Icons and New UI Icons
+- Remove `data-big` svg attribute and use the `width` attribute instead
 
 ## 97.0.0 (9.7.0)
 
