@@ -29,10 +29,16 @@ import com.intellij.openapi.util.Ref
 import com.intellij.openapi.util.io.FileUtil.toCanonicalPath
 import com.intellij.openapi.vfs.VFileProperty
 import com.intellij.openapi.vfs.VirtualFile
+import com.intellij.ui.scale.ScaleContext
+import com.intellij.util.IconUtil
+import com.intellij.util.SVGLoader
+import com.intellij.util.ui.JBUI
 import com.mallowigi.icons.special.DirIcon
 import com.mallowigi.utils.LayeredIconService
 import org.jetbrains.annotations.NonNls
+import java.awt.Image
 import java.io.File
+import java.io.FileInputStream
 import java.io.IOException
 import java.net.MalformedURLException
 import java.net.URL
@@ -84,6 +90,7 @@ object AtomIcons {
    * @param canonicalPath
    * @return
    */
+  @Suppress("UnstableApiUsage")
   @Throws(IOException::class)
   fun loadSVGIcon(canonicalPath: String): Icon {
     val url = Ref.create<URL>()
@@ -92,7 +99,8 @@ object AtomIcons {
     } catch (e: MalformedURLException) {
       Logger.getAnonymousLogger().info(e.message)
     }
-    return IconLoader.getIcon(canonicalPath, AtomIcons.javaClass)
+    val bufferedImage: Image = SVGLoader.loadHiDPI(url.get(), FileInputStream(canonicalPath), ScaleContext.create())
+    return IconUtil.toSize(IconUtil.createImageIcon(bufferedImage), JBUI.scale(16), JBUI.scale(16))
   }
 
   /**
