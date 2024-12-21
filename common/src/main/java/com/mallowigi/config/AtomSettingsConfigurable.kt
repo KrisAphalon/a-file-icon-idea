@@ -77,6 +77,7 @@ class AtomSettingsConfigurable : BoundSearchableConfigurable(
   @Suppress("Detekt.LongMethod")
   override fun createPanel(): DialogPanel {
     lateinit var fileIconsCheckbox: JBCheckBox
+    lateinit var folderIconsCheckbox: JBCheckBox
     lateinit var psiIconsCheckbox: JBCheckBox
     lateinit var accentColorCheckbox: JBCheckBox
     lateinit var themedColorCheckbox: JBCheckBox
@@ -100,7 +101,7 @@ class AtomSettingsConfigurable : BoundSearchableConfigurable(
         row {
           icon(FOLDERS)
             .gap(RightGap.SMALL)
-          checkBox(message("SettingsForm.enableDirectoryIconsCheckbox.text"))
+          folderIconsCheckbox = checkBox(message("SettingsForm.enableDirectoryIconsCheckbox.text"))
             .bindSelected(settings::isEnabledDirectories)
             .gap(RightGap.SMALL)
             .component
@@ -129,6 +130,7 @@ class AtomSettingsConfigurable : BoundSearchableConfigurable(
             .gap(RightGap.SMALL)
           checkBox(message("SettingsForm.hollowFoldersCheckbox.text"))
             .bindSelected(settings::isUseHollowFolders)
+            .enabledIf(folderIconsCheckbox.selected)
             .gap(RightGap.SMALL)
         }.rowComment(message("SettingsForm.hollowFoldersCheckbox.toolTipText"))
 
