@@ -30,6 +30,7 @@ import com.intellij.util.indexing.*
 import com.intellij.util.io.DataExternalizer
 import com.intellij.util.io.EnumeratorStringDescriptor
 import com.intellij.util.io.KeyDescriptor
+import com.mallowigi.config.AtomSettingsConfig
 import com.mallowigi.config.select.AtomSelectConfig
 import com.mallowigi.models.IconType
 import com.mallowigi.models.VirtualFileInfo
@@ -47,6 +48,9 @@ class FileAssociationsIndex : FileBasedIndexExtension<String, RegexAssociation>(
       out.writeUTF(value.name)
       out.writeUTF(value.icon)
       out.writeUTF(value.pattern)
+      out.writeUTF(value.iconColor ?: Association.DEFAULT_COLOR)
+      out.writeUTF(value.folderColor ?: Association.DEFAULT_COLOR)
+      out.writeUTF(value.folderIconColor ?: Association.DEFAULT_COLOR)
     }
 
     override fun read(input: DataInput): RegexAssociation {
@@ -57,6 +61,10 @@ class FileAssociationsIndex : FileBasedIndexExtension<String, RegexAssociation>(
       association.name = input.readUTF()
       association.icon = input.readUTF()
       association.pattern = input.readUTF()
+      // Normalize deserialized values
+      association.iconColor = input.readUTF().takeIf { it != Association.DEFAULT_COLOR }
+      association.folderColor = input.readUTF().takeIf { it != Association.DEFAULT_COLOR }
+      association.folderIconColor = input.readUTF().takeIf { it != Association.DEFAULT_COLOR }
 
       return association
     }
@@ -80,36 +88,45 @@ class FileAssociationsIndex : FileBasedIndexExtension<String, RegexAssociation>(
 
   override fun getValueExternalizer(): DataExternalizer<RegexAssociation> = myValueExternalizer
 
-  override fun getVersion(): Int = 2
+  override fun getVersion(): Int = VERSION
 
   override fun indexDirectories(): Boolean = true
 
   internal class FileAssociationsIndexer : DataIndexer<String, RegexAssociation, FileContent> {
-    val fileAssociations = AtomSelectConfig.instance.selectedFileAssociations
-    val folderAssociations = AtomSelectConfig.instance.selectedFolderAssociations
-
     override fun map(inputData: FileContent): MutableMap<String, RegexAssociation> {
       val file = inputData.file
       val path = file.path
       val fileInfo = VirtualFileInfo(file)
       val isFolder = file.isDirectory
 
-      val map = mutableMapOf<String, RegexAssociation>()
-      // Find association for the given path
-      val association = when {
-        isFolder -> folderAssociations.findAssociation(fileInfo)
-        else -> fileAssociations.findAssociation(fileInfo)
-      }
+      when {
+        isFolder && !AtomSettingsConfig.instance.isEnabledDirectories -> return mutableMapOf()
+        !isFolder && !AtomSettingsConfig.instance.isEnabledIcons -> return mutableMapOf()
 
-      if (association != null && association is RegexAssociation) {
-        map[path] = association
-      }
+        // Find association for the given path
+        else -> {
+          val fileAssociations = AtomSelectConfig.instance.selectedFileAssociations
+          val folderAssociations = AtomSelectConfig.instance.selectedFolderAssociations
 
-      return map
+          val map = mutableMapOf<String, RegexAssociation>()
+          // Find association for the given path
+          val association = when {
+            isFolder -> folderAssociations.findAssociation(fileInfo)
+            else -> fileAssociations.findAssociation(fileInfo)
+          }
+
+          if (association != null && association is RegexAssociation) {
+            map[path] = association
+          }
+
+          return map
+        }
+      }
     }
   }
 
   companion object {
     val NAME = ID.create<String, RegexAssociation>("com.mallowigi.icons.associations.fileAssociationsIndex")
+    const val VERSION = 3
   }
 }

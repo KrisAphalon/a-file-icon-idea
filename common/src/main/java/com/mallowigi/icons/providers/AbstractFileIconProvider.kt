@@ -27,7 +27,6 @@ package com.mallowigi.icons.providers
 import com.intellij.ide.IconProvider
 import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.project.Project
-import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiElement
 import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.util.PsiUtilCore
@@ -65,30 +64,20 @@ abstract class AbstractFileIconProvider : IconProvider(), DumbAware {
     val virtualFile = PsiUtilCore.getVirtualFile(element)
     return virtualFile?.let {
       val file: FileInfo = VirtualFileInfo(it)
-      val association = findAssociation(file, virtualFile, element.project)
+      val association = findAssociation(file, element.project)
       getIconForAssociation(association)
     }
   }
 
-  /**
-   * Get icon for association
-   *
-   * @param association
-   * @return
-   */
+  /** Get icon for association. */
   private fun getIconForAssociation(association: Association?): Icon? = association?.let { loadIcon(it) }
 
-  /**
-   * Load icon
-   *
-   * @param association
-   * @return
-   */
+  /** Load icon. */
   private fun loadIcon(association: Association): Icon? =
     CacheIconProvider.instance.iconCache.getOrPut(association.icon) { getIcon(association.icon) }
 
   /** Finds and retrieves the first matching association for the given file within the specified project scope. */
-  private fun findAssociation(file: FileInfo, virtualFile: VirtualFile, project: Project): Association? {
+  private fun findAssociation(file: FileInfo, project: Project): Association? {
     val fileBasedIndex = FileBasedIndex.getInstance()
     var association: RegexAssociation? = null
 

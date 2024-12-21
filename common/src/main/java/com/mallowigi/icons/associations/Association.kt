@@ -126,6 +126,7 @@ abstract class Association @PropertyMapping() internal constructor() : Serializa
   /** Check if matches icon name. */
   fun matchesName(assocName: String): Boolean = name == assocName
 
+  @Suppress("detekt:UnnecessaryParentheses")
   override fun equals(other: Any?): Boolean {
     if (this === other) return true
     if (javaClass != other?.javaClass) return false
@@ -133,29 +134,33 @@ abstract class Association @PropertyMapping() internal constructor() : Serializa
     other as Association
 
     if (enabled != other.enabled) return false
-    if (touched != other.touched) return false
     if (priority != other.priority) return false
     if (iconType != other.iconType) return false
     if (name != other.name) return false
     if (icon != other.icon) return false
-    if (matcher != other.matcher) return false
+    if ((iconColor ?: DEFAULT_COLOR) != (other.iconColor ?: DEFAULT_COLOR)) return false
+    if ((folderColor ?: DEFAULT_COLOR) != (other.folderColor ?: DEFAULT_COLOR)) return false
+    if ((folderIconColor ?: DEFAULT_COLOR) != (other.folderIconColor ?: DEFAULT_COLOR)) return false
+
 
     return true
   }
 
   override fun hashCode(): Int {
     var result = enabled.hashCode()
-    result = 31 * result + touched.hashCode()
     result = 31 * result + priority
     result = 31 * result + iconType.hashCode()
     result = 31 * result + name.hashCode()
     result = 31 * result + icon.hashCode()
-    result = 31 * result + matcher.hashCode()
+    result = 31 * result + (iconColor ?: DEFAULT_COLOR).hashCode()
+    result = 31 * result + (folderColor ?: DEFAULT_COLOR).hashCode()
+    result = 31 * result + (folderIconColor ?: DEFAULT_COLOR).hashCode()
+
     return result
   }
 
   companion object {
     private const val serialVersionUID: Long = -1L
-    private const val DEFAULT_COLOR = "808080"
+    const val DEFAULT_COLOR = "808080"
   }
 }

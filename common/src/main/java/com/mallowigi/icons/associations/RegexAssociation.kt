@@ -86,6 +86,10 @@ class RegexAssociation internal constructor() : Association() {
     pattern = other.matcher
   }
 
+  override fun toString(): String =
+    "RegexAssociation(enabled=$enabled, priority=$priority, iconType=$iconType, name='$name', icon='$icon', pattern='$pattern', iconColor='$iconColor', folderColor='$folderColor', folderIconColor='$folderIconColor')"
+
+  @Suppress("detekt:UnnecessaryParentheses")
   override fun equals(other: Any?): Boolean {
     if (this === other) return true
     if (javaClass != other?.javaClass) return false
@@ -98,6 +102,9 @@ class RegexAssociation internal constructor() : Association() {
     if (name != other.name) return false
     if (icon != other.icon) return false
     if (pattern != other.pattern) return false
+    if ((iconColor ?: DEFAULT_COLOR) != (other.iconColor ?: DEFAULT_COLOR)) return false
+    if ((folderColor ?: DEFAULT_COLOR) != (other.folderColor ?: DEFAULT_COLOR)) return false
+    if ((folderIconColor ?: DEFAULT_COLOR) != (other.folderIconColor ?: DEFAULT_COLOR)) return false
 
     return true
   }
@@ -109,6 +116,9 @@ class RegexAssociation internal constructor() : Association() {
     result = 31 * result + name.hashCode()
     result = 31 * result + icon.hashCode()
     result = 31 * result + pattern.hashCode()
+    result = 31 * result + (iconColor ?: DEFAULT_COLOR).hashCode()
+    result = 31 * result + (folderColor ?: DEFAULT_COLOR).hashCode()
+    result = 31 * result + (folderIconColor ?: DEFAULT_COLOR).hashCode()
     return result
   }
 

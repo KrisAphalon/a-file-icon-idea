@@ -20,7 +20,6 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
- *
  */
 
 package com.mallowigi.utils
@@ -37,16 +36,14 @@ import com.intellij.openapi.project.ProjectManager
 import com.intellij.ui.ColorUtil
 import com.intellij.ui.JBColor
 import com.intellij.ui.components.ActionLink
+import com.intellij.util.indexing.FileBasedIndex
 import com.intellij.util.ui.UIUtil
 import com.mallowigi.config.AtomSettingsBundle
 import com.mallowigi.config.AtomSettingsConfig
+import com.mallowigi.icons.associations.FileAssociationsIndex
 import javax.swing.UIManager
 
-/**
- * Refresh
- *
- * @param project
- */
+/** Refresh. */
 fun refresh(project: Project?) {
   if (project != null) {
     val view = ProjectView.getInstance(project)
@@ -93,9 +90,9 @@ fun replaceArrowIcons() {
 fun getAccentFromTheme(): String {
   val namedKey = when (LafManager.getInstance().currentUIThemeLookAndFeel?.name) {
     "IntelliJ Light" -> "ActionButton.focusedBorderColor"
-    "Light"          -> "ActionButton.focusedBorderColor"
-    "Darcula"        -> "Button.select"
-    else             -> "Link.activeForeground"
+    "Light" -> "ActionButton.focusedBorderColor"
+    "Darcula" -> "Button.select"
+    else -> "Link.activeForeground"
   }
 
   val namedColor = JBColor.namedColor(
@@ -115,5 +112,8 @@ fun findSettingsPage(link: ActionLink, id: String) {
   settings?.select(settings.find(id))
 }
 
-fun isPluginEnabled(pluginId: String) = PluginManagerCore.getPlugin(PluginId.getId(pluginId))?.isEnabled
-  ?: false
+fun isPluginEnabled(pluginId: String) = PluginManagerCore.getPlugin(PluginId.getId(pluginId))?.isEnabled == true
+
+fun refreshIndex() {
+  FileBasedIndex.getInstance().requestRebuild(FileAssociationsIndex.NAME)
+}
