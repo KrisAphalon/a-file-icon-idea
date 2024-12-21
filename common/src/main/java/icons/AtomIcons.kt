@@ -25,13 +25,17 @@ package icons
 
 import com.intellij.icons.AllIcons
 import com.intellij.openapi.util.IconLoader
+import com.intellij.openapi.util.Ref
 import com.intellij.openapi.util.io.FileUtil.toCanonicalPath
 import com.intellij.openapi.vfs.VFileProperty
 import com.intellij.openapi.vfs.VirtualFile
 import com.mallowigi.icons.special.DirIcon
 import com.mallowigi.utils.LayeredIconService
 import org.jetbrains.annotations.NonNls
+import java.io.File
 import java.io.IOException
+import java.net.MalformedURLException
+import java.net.URL
 import java.util.logging.Logger
 import javax.swing.Icon
 
@@ -82,12 +86,13 @@ object AtomIcons {
    */
   @Throws(IOException::class)
   fun loadSVGIcon(canonicalPath: String): Icon {
-    return try {
-      IconLoader.getIcon(canonicalPath, AtomIcons.javaClass)
-    } catch (e: Exception) {
+    val url = Ref.create<URL>()
+    try {
+      url.set(File(canonicalPath).toURI().toURL())
+    } catch (e: MalformedURLException) {
       Logger.getAnonymousLogger().info(e.message)
-      throw e
     }
+    return IconLoader.getIcon(canonicalPath, AtomIcons.javaClass)
   }
 
   /**
