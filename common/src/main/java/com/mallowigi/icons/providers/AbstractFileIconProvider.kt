@@ -20,17 +20,21 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
- *
  */
 
 package com.mallowigi.icons.providers
 
 import com.intellij.ide.IconProvider
 import com.intellij.openapi.project.DumbAware
+import com.intellij.openapi.project.Project
+import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiElement
+import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.util.PsiUtilCore
+import com.intellij.util.indexing.FileBasedIndex
 import com.mallowigi.icons.associations.Association
 import com.mallowigi.icons.associations.Associations
+import com.mallowigi.icons.associations.FileAssociationsIndex
 import com.mallowigi.models.FileInfo
 import com.mallowigi.models.IconType
 import com.mallowigi.models.VirtualFileInfo
@@ -47,7 +51,7 @@ abstract class AbstractFileIconProvider : IconProvider(), DumbAware {
   override fun getIcon(element: PsiElement, flags: Int): Icon? = when {
     isNotApplicable() -> null
     isOfType(element) -> findIcon(element)
-    else              -> null
+    else -> null
   }
 
   /**
@@ -60,7 +64,7 @@ abstract class AbstractFileIconProvider : IconProvider(), DumbAware {
     val virtualFile = PsiUtilCore.getVirtualFile(element)
     return virtualFile?.let {
       val file: FileInfo = VirtualFileInfo(it)
-      val association = findAssociation(file)
+      val association = findAssociation(file, virtualFile, element.project)
       getIconForAssociation(association)
     }
   }
@@ -82,17 +86,21 @@ abstract class AbstractFileIconProvider : IconProvider(), DumbAware {
   private fun loadIcon(association: Association): Icon? =
     CacheIconProvider.instance.iconCache.getOrPut(association.icon) { getIcon(association.icon) }
 
-  /**
-   * Find association
-   *
-   * @param file
-   * @return
-   */
-  private fun findAssociation(file: FileInfo): Association? = getSource().findAssociation(file)
+  /** Finds and retrieves the first matching association for the given file within the specified project scope. */
+  private fun findAssociation(file: FileInfo, virtualFile: VirtualFile, project: Project): Association? {
+    if (getType() == IconType.FOLDER) return getSource().findAssociation(file)
+
+    val fileBasedIndex = FileBasedIndex.getInstance()
+    val associations = fileBasedIndex.getValues(
+      FileAssociationsIndex.NAME,
+      file.path,
+      GlobalSearchScope.allScope(project)
+    )
+    return associations.firstOrNull()
+  }
 
   /**
-   * Checks whether psiElement is of type (PsiFile/PsiDirectory) defined by
-   * this provider
+   * Checks whether psiElement is of type (PsiFile/PsiDirectory) defined by this provider
    *
    * @param element the psi element
    * @return true if element is of type defined by this provider
