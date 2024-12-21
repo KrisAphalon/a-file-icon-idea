@@ -24,7 +24,6 @@
 
 package com.mallowigi.config
 
-import com.intellij.openapi.components.service
 import com.intellij.openapi.options.BoundSearchableConfigurable
 import com.intellij.openapi.ui.DialogPanel
 import com.intellij.openapi.ui.Messages
@@ -371,7 +370,7 @@ class AtomSettingsConfigurable : BoundSearchableConfigurable(
               .gap(RightGap.SMALL)
           },
           {
-            val model = DefaultComboBoxModel(ArrowsStyles.values())
+            val model = DefaultComboBoxModel(ArrowsStyles.entries.toTypedArray())
             comboBox(model, arrowsRenderer)
               .bindItem(settings::arrowsStyle) {
                 settings.arrowsStyle = it ?: ArrowsStyles.MATERIAL
@@ -452,10 +451,6 @@ class AtomSettingsConfigurable : BoundSearchableConfigurable(
     /** Configurable ID. */
     @NonNls
     const val ID: String = "AtomSettingsConfigurable"
-
-    /** Instance. */
-    @JvmStatic
-    val instance: AtomSettingsConfigurable by lazy { service() }
   }
 
 }

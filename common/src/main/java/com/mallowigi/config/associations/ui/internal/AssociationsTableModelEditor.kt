@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2015-2023 Elior "Mallowigi" Boukhobza
+ * Copyright (c) 2015-2024 Elior "Mallowigi" Boukhobza
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -20,7 +20,6 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
- *
  */
 package com.mallowigi.config.associations.ui.internal
 
@@ -74,7 +73,7 @@ class AssociationsTableModelEditor(
   private val toolbarDecorator: ToolbarDecorator
 
   /** Association Table Model. */
-  private val model: AssociationTableModel
+  private val model: AssociationTableModel = AssociationTableModel(columns, items)
 
   /** Backing field for model's unfiltered list. */
   private val myList: MutableList<RegexAssociation>
@@ -88,7 +87,6 @@ class AssociationsTableModelEditor(
   private var increment: Int = 0
 
   init {
-    model = AssociationTableModel(columns, items)
     initUnfilteredList()
 
     // Table settings
@@ -261,8 +259,7 @@ class AssociationsTableModelEditor(
   }
 
   /**
-   * Overrides [silentlyReplaceItem] - we need to modify the unfiltered list
-   * when a change occurs since we're working on the filtered list
+   * Overrides [silentlyReplaceItem] - we need to modify the unfiltered list when a change occurs since we're working on the filtered list
    *
    * @param oldItem item changed (in the filtered list)
    * @param newItem new item to insert
@@ -287,10 +284,7 @@ class AssociationsTableModelEditor(
   inner class AssociationTableModel(columnNames: Array<ColumnInfo<*, *>>, items: List<RegexAssociation>) :
     ListTableModel<RegexAssociation>(columnNames, items) {
 
-    /**
-     * This contains all items, before any filter is applied. This is also what
-     * will be persisted.
-     */
+    /** This contains all items, before any filter is applied. This is also what will be persisted. */
     var allItems: MutableList<RegexAssociation> = items.toMutableList()
 
     /** This is the currently filtered table. */
