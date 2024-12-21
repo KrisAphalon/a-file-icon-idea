@@ -54,6 +54,6 @@ class OldToolbarGroup : DefaultActionGroup() {
   override fun getActionUpdateThread(): ActionUpdateThread = ActionUpdateThread.BGT
 
   companion object {
-    const val MAIN_TOOLBAR = "MainToolbar"
+    const val MAIN_TOOLBAR = "MainToolBar"
   }
 }
