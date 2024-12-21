@@ -35,6 +35,7 @@ import com.intellij.util.indexing.FileBasedIndex
 import com.mallowigi.icons.associations.Association
 import com.mallowigi.icons.associations.Associations
 import com.mallowigi.icons.associations.FileAssociationsIndex
+import com.mallowigi.icons.associations.RegexAssociation
 import com.mallowigi.models.FileInfo
 import com.mallowigi.models.IconType
 import com.mallowigi.models.VirtualFileInfo
@@ -88,15 +89,20 @@ abstract class AbstractFileIconProvider : IconProvider(), DumbAware {
 
   /** Finds and retrieves the first matching association for the given file within the specified project scope. */
   private fun findAssociation(file: FileInfo, virtualFile: VirtualFile, project: Project): Association? {
-    if (getType() == IconType.FOLDER) return getSource().findAssociation(file)
-
     val fileBasedIndex = FileBasedIndex.getInstance()
-    val associations = fileBasedIndex.getValues(
+    var association: RegexAssociation? = null
+
+    fileBasedIndex.processValues(
       FileAssociationsIndex.NAME,
       file.path,
-      GlobalSearchScope.allScope(project)
+      null,
+      { _, value ->
+        association = value
+        false
+      },
+      GlobalSearchScope.projectScope(project)
     )
-    return associations.firstOrNull()
+    return association
   }
 
   /**

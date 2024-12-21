@@ -23,6 +23,8 @@
  */
 package com.mallowigi.icons.associations
 
+import com.intellij.openapi.project.ProjectLocator
+import com.intellij.openapi.roots.ProjectRootManager
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.util.indexing.*
 import com.intellij.util.io.DataExternalizer
@@ -61,7 +63,9 @@ class FileAssociationsIndex : FileBasedIndexExtension<String, RegexAssociation>(
   }
 
   private val myInputFilter = FileBasedIndex.InputFilter { file: VirtualFile ->
-    file.isInLocalFileSystem
+    val project = ProjectLocator.getInstance().guessProjectForFile(file) ?: return@InputFilter false
+    val projectFileIndex = ProjectRootManager.getInstance(project).fileIndex
+    file.isInLocalFileSystem && !projectFileIndex.isExcluded(file)
   }
 
   override fun getName(): ID<String, RegexAssociation> = NAME
@@ -76,19 +80,27 @@ class FileAssociationsIndex : FileBasedIndexExtension<String, RegexAssociation>(
 
   override fun getValueExternalizer(): DataExternalizer<RegexAssociation> = myValueExternalizer
 
-  override fun getVersion(): Int = 1
+  override fun getVersion(): Int = 2
+
+  override fun indexDirectories(): Boolean = true
 
   internal class FileAssociationsIndexer : DataIndexer<String, RegexAssociation, FileContent> {
     val fileAssociations = AtomSelectConfig.instance.selectedFileAssociations
+    val folderAssociations = AtomSelectConfig.instance.selectedFolderAssociations
 
     override fun map(inputData: FileContent): MutableMap<String, RegexAssociation> {
       val file = inputData.file
       val path = file.path
       val fileInfo = VirtualFileInfo(file)
+      val isFolder = file.isDirectory
 
       val map = mutableMapOf<String, RegexAssociation>()
       // Find association for the given path
-      val association = fileAssociations.findAssociation(fileInfo)
+      val association = when {
+        isFolder -> folderAssociations.findAssociation(fileInfo)
+        else -> fileAssociations.findAssociation(fileInfo)
+      }
+
       if (association != null && association is RegexAssociation) {
         map[path] = association
       }
