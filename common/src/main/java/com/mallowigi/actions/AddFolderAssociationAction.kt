@@ -28,13 +28,14 @@ import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.CommonDataKeys
 import com.intellij.openapi.options.ShowSettingsUtil
+import com.mallowigi.config.associations.ui.internal.AssociationsTableModelEditor.Companion.DEFAULT_FOLDER_COLOR
 import com.mallowigi.config.associations.ui.internal.AssociationsTableModelEditor.Companion.DEFAULT_ICON_COLOR
 import com.mallowigi.config.associations.ui.internal.AssociationsTableModelEditor.Companion.DEFAULT_PRIORITY
 import com.mallowigi.config.select.AtomSelectConfig
 import com.mallowigi.config.select.AtomSelectConfigurable
 import com.mallowigi.icons.associations.RegexAssociation
 
-class AddFileAssociationAction : AnAction() {
+class AddFolderAssociationAction : AnAction() {
   override fun actionPerformed(e: AnActionEvent) {
     val virtualFile = e.getData(CommonDataKeys.VIRTUAL_FILE)
     if (virtualFile == null) return
@@ -46,13 +47,15 @@ class AddFileAssociationAction : AnAction() {
     val association = RegexAssociation().apply {
       name = "$fileNameWithoutExtension ${fileExtension.uppercase()}"
       pattern = fileName
-      icon = "/icons/files/question.svg"
+      icon = "/folder.svg"
       priority = DEFAULT_PRIORITY
-      iconColor = DEFAULT_ICON_COLOR
+      folderColor = DEFAULT_FOLDER_COLOR
+      folderIconColor = DEFAULT_ICON_COLOR
       touched = true
     }
 
-    AtomSelectConfig.instance.selectedFileAssociations.addAssociation(association)
+    AtomSelectConfig.instance.selectedFolderAssociations.addAssociation(association)
+    AtomSelectConfig.instance.selectedFolderOpenAssociations.addAssociation(association)
 
     ShowSettingsUtil.getInstance().showSettingsDialog(
       e.project,
@@ -65,7 +68,7 @@ class AddFileAssociationAction : AnAction() {
     val virtualFiles = event.getData(CommonDataKeys.VIRTUAL_FILE_ARRAY)
 
     // Only make the action available when exactly one file is selected
-    event.presentation.isEnabledAndVisible = virtualFiles != null && virtualFiles.size == 1 && !virtualFiles[0].isDirectory
+    event.presentation.isEnabledAndVisible = virtualFiles != null && virtualFiles.size == 1 && virtualFiles[0].isDirectory
   }
 
   override fun getActionUpdateThread(): ActionUpdateThread = ActionUpdateThread.BGT

@@ -172,11 +172,19 @@
       <separator/>
     </group>
 
-    <action class="com.mallowigi.actions.AddFileAssociationAction"
-            id="AddAssociationAction"
-            icon="/actions/add.svg">
-      <add-to-group group-id="ProjectViewPopupMenu"/>
-    </action>
+    <group id="AtomFileIcons.Menus">
+      <action class="com.mallowigi.actions.AddFileAssociationAction"
+              id="AddFileAssociationAction"
+              icon="/actions/add.svg">
+      </action>
+      <action class="com.mallowigi.actions.AddFolderAssociationAction"
+              id="AddFolderAssociationAction"
+              icon="/actions/addFolder.svg">
+      </action>
+
+      <add-to-group group-id="NewGroup"/>
+    </group>
+
 
   </actions>
 

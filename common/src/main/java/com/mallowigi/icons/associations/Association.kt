@@ -159,6 +159,14 @@ abstract class Association @PropertyMapping() internal constructor() : Serializa
     return result
   }
 
+  open fun isValid(): Boolean {
+    if (name.isBlank()) return false
+    if (icon.isBlank() || !icon.endsWith("svg")) return false
+    if (priority < 0) return false
+
+    return true
+  }
+
   companion object {
     private const val serialVersionUID: Long = -1L
     const val DEFAULT_COLOR = "808080"

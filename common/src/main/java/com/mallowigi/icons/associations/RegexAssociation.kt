@@ -122,6 +122,20 @@ class RegexAssociation internal constructor() : Association() {
     return result
   }
 
+  override fun isValid(): Boolean {
+    if (pattern.isBlank()) return false
+
+    if (!super.isValid()) return false
+
+    return try {
+      Pattern.compile(pattern)
+      true
+    } catch (e: PatternSyntaxException) {
+      LOG.warn(e)
+      false
+    }
+  }
+
   companion object {
     private val LOG = Logger.getInstance(RegexAssociation::class.java)
   }
