@@ -2,6 +2,19 @@
 
 ----
 
+## 100.0.0 (10.0.0)
+
+### Features
+
+- **Performance Improvement**: Using an index for querying associations instead of iterating over the list
+- **New Feature**: Adding associations on the fly via the context menu
+
+### Fixes
+
+- Disable *Hollow Folders* when the *Enable Folder Icons* option is disabled.
+- Fix the *Old Toolbar* menu
+- Fix Custom Associations' icon selector
+
 ## 98.0.0 (9.8.0)
 
 ### Fixes

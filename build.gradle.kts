@@ -20,7 +20,6 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
- *
  */
 @file:Suppress("SpellCheckingInspection", "HardCodedStringLiteral")
 
@@ -96,7 +95,7 @@ dependencies {
 
   detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.6")
   implementation("com.jgoodies:jgoodies-forms:1.9.0")
-  implementation("com.thoughtworks.xstream:xstream:1.4.20")
+  implementation("com.thoughtworks.xstream:xstream:1.4.21")
   implementation("org.javassist:javassist:3.30.2-GA")
   implementation(project(":common"))
   runtimeOnly(project(":rider"))
@@ -172,7 +171,7 @@ intellijPlatform {
     id = pluginID
     name = pluginName
     version = pluginVersion
-    description = pluginDescription
+    //description = pluginDescription
 
     //Get the latest available change notes from the changelog file
     val changelog = project.changelog // local variable for configuration cache compatibility
