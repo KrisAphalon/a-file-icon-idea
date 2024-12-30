@@ -172,6 +172,14 @@
       <separator/>
     </group>
 
+    <action class="com.mallowigi.actions.AddFileAssociationAction"
+            id="AddAssociationAction"
+            text="Add Association"
+            description="Add a new association"
+            icon="/actions/add.svg">
+      <add-to-group group-id="ProjectViewPopupMenu"/>
+    </action>
+
   </actions>
 
   <description><![CDATA[
