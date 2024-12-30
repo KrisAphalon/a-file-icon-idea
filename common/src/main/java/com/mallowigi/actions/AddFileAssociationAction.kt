@@ -23,26 +23,50 @@
  */
 package com.mallowigi.actions
 
+import com.intellij.openapi.actionSystem.ActionUpdateThread
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
+import com.intellij.openapi.actionSystem.CommonDataKeys
 import com.intellij.openapi.options.ShowSettingsUtil
-import com.mallowigi.config.BundledAssociations
+import com.mallowigi.config.associations.ui.internal.AssociationsTableModelEditor.Companion.DEFAULT_ICON_COLOR
+import com.mallowigi.config.associations.ui.internal.AssociationsTableModelEditor.Companion.DEFAULT_PRIORITY
+import com.mallowigi.config.select.AtomSelectConfig
 import com.mallowigi.config.select.AtomSelectConfigurable
 import com.mallowigi.icons.associations.RegexAssociation
-import com.mallowigi.models.IconType
 
 class AddFileAssociationAction : AnAction() {
   override fun actionPerformed(e: AnActionEvent) {
+    val virtualFile = e.getData(CommonDataKeys.VIRTUAL_FILE)
+    if (virtualFile == null) return
+
+    val fileName = virtualFile.name
+    val fileNameWithoutExtension = virtualFile.nameWithoutExtension.replaceFirstChar { it.uppercase() }
+    val fileExtension = virtualFile.extension ?: ""
+
     val association = RegexAssociation().apply {
-      name = "My New Association"
-      pattern = "\\.myext$"
-      icon = "icon"
+      name = "$fileNameWithoutExtension ${fileExtension.uppercase()}"
+      pattern = fileName
+      icon = ""
+      priority = DEFAULT_PRIORITY
+      iconColor = DEFAULT_ICON_COLOR
+      touched = true
     }
-    BundledAssociations.instance.insert("name", association, IconType.FILE)
+
+    AtomSelectConfig.instance.selectedFileAssociations.addAssociation(association)
 
     ShowSettingsUtil.getInstance().showSettingsDialog(
       e.project,
       AtomSelectConfigurable::class.java
     )
   }
+
+  override fun update(event: AnActionEvent) {
+    // Get the selected file array from the context
+    val virtualFiles = event.getData(CommonDataKeys.VIRTUAL_FILE_ARRAY)
+
+    // Only make the action available when exactly one file is selected
+    event.presentation.isEnabledAndVisible = virtualFiles != null && virtualFiles.size == 1
+  }
+
+  override fun getActionUpdateThread(): ActionUpdateThread = ActionUpdateThread.BGT
 }

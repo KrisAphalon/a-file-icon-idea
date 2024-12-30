@@ -66,6 +66,21 @@ class SelectedAssociations(
   }
 
   /**
+   * Adds a new [RegexAssociation] to the collection of associations. If an association with the same name already exists, the new
+   * association's name is appended with "(1)" to ensure uniqueness before adding it to the collection.
+   *
+   * @param association the [RegexAssociation] to be added
+   */
+  fun addAssociation(association: RegexAssociation) {
+    if (hasOwn(association.name)) {
+      association.name = "${association.name} (1)"
+      ownAssociations[association.name] = association
+    } else {
+      ownAssociations[association.name] = association
+    }
+  }
+
+  /**
    * Checks if an own [Association] is already registered
    *
    * @param name
