@@ -108,7 +108,7 @@ class FileAssociationsIndex : FileBasedIndexExtension<String, RegexAssociation>(
           val fileAssociations = AtomSelectConfig.instance.selectedFileAssociations
           val folderAssociations = AtomSelectConfig.instance.selectedFolderAssociations
 
-          val map = mutableMapOf<String, RegexAssociation>()
+          val map = cachedAssociations
           // Find association for the given path
           val association = when {
             isFolder -> folderAssociations.findAssociation(fileInfo)
@@ -128,5 +128,8 @@ class FileAssociationsIndex : FileBasedIndexExtension<String, RegexAssociation>(
   companion object {
     val NAME = ID.create<String, RegexAssociation>("com.mallowigi.icons.associations.fileAssociationsIndex")
     const val VERSION = 3
+
+    private val cachedAssociations: MutableMap<String, RegexAssociation> = mutableMapOf()
+
   }
 }
