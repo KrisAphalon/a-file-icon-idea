@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2015-2024 Elior "Mallowigi" Boukhobza
+ * Copyright (c) 2015-2025 Elior "Mallowigi" Boukhobza
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -108,7 +108,7 @@ class FileAssociationsIndex : FileBasedIndexExtension<String, RegexAssociation>(
           val fileAssociations = AtomSelectConfig.instance.selectedFileAssociations
           val folderAssociations = AtomSelectConfig.instance.selectedFolderAssociations
 
-          val map = cachedAssociations
+          val map = mutableMapOf<String, RegexAssociation>()
           // Find association for the given path
           val association = when {
             isFolder -> folderAssociations.findAssociation(fileInfo)
@@ -128,8 +128,6 @@ class FileAssociationsIndex : FileBasedIndexExtension<String, RegexAssociation>(
   companion object {
     val NAME = ID.create<String, RegexAssociation>("com.mallowigi.icons.associations.fileAssociationsIndex")
     const val VERSION = 3
-
-    private val cachedAssociations: MutableMap<String, RegexAssociation> = mutableMapOf()
 
   }
 }
