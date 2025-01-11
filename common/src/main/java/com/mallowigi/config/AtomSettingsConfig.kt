@@ -102,6 +102,9 @@ class AtomSettingsConfig : BaseState(), PersistentStateComponent<AtomSettingsCon
   /** Whether NgRx Icons should be used. */
   var isUseNgRxIcons: Boolean by property(true)
 
+  /** Whether NgRx Icons should be used. */
+  var isUseCssIcons: Boolean by property(true)
+
   /** Is use next icons. */
   var isUseNextIcons: Boolean by property(true)
 
@@ -200,6 +203,7 @@ class AtomSettingsConfig : BaseState(), PersistentStateComponent<AtomSettingsCon
     isUseNestIcons = true
     isUseNextIcons = true
     isUseNgRxIcons = true
+    isUseCssIcons = true
     isUseRailsIcons = true
     isUseRecoilIcons = true
     isUseReduxIcons = true
@@ -213,81 +217,81 @@ class AtomSettingsConfig : BaseState(), PersistentStateComponent<AtomSettingsCon
     fireChanged()
   }
 
-  //region File Icons
+  // region File Icons
 
   /** Toggle enabled icons. */
   fun toggleEnabledIcons() {
     isEnabledIcons = !isEnabledIcons
   }
-  //endregion
+  // endregion
 
-  //region Directory Icons
+  // region Directory Icons
 
   /** Toggle directories icons. */
   fun toggleDirectoriesIcons() {
     isEnabledDirectories = !isEnabledDirectories
   }
-  //endregion
+  // endregion
 
-  //region Monochrome Icons
+  // region Monochrome Icons
 
   /** Toggle monochrome icons. */
   fun toggleMonochromeIcons() {
     isMonochromeIcons = !isMonochromeIcons
   }
 
-  //endregion
+  // endregion
 
-  //region Saturated Icons
+  // region Saturated Icons
 
   /** Toggle saturation icons. */
   fun toggleSaturatedIcons() {
     isSaturatedIcons = !isSaturatedIcons
   }
 
-  //endregion
+  // endregion
 
-  //region UI Icons
+  // region UI Icons
 
   /** Toggle ui icons. */
   fun toggleUIIcons() {
     isEnabledUIIcons = !isEnabledUIIcons
   }
-  //endregion
+  // endregion
 
-  //region PSI Icons
+  // region PSI Icons
 
   /** Toggle psi icons. */
   fun togglePsiIcons() {
     isEnabledPsiIcons = !isEnabledPsiIcons
   }
-  //endregion
+  // endregion
 
-  //region Hollow Folders
+  // region Hollow Folders
 
   /** Toggle use hollow folders. */
   fun toggleUseHollowFolders() {
     isUseHollowFolders = !isUseHollowFolders
   }
-  //endregion
+  // endregion
 
-  //region Hide File Icons
+  // region Hide File Icons
 
   /** Toggle hide file icons. */
   fun toggleHideFileIcons() {
     isHideFileIcons = !isHideFileIcons
   }
-  //endregion
+  // endregion
 
-  //region Hide Folder Icons
+  // region Hide Folder Icons
 
   /** Toggle hide folder icons. */
   fun toggleHideFolderIcons() {
     isHideFolderIcons = !isHideFolderIcons
   }
-  //endregion
+  // endregion
 
-  //region Accent Color
+  // region Accent Color
 
   /** Get current accent color. */
   fun getCurrentAccentColor(): String {
@@ -295,32 +299,32 @@ class AtomSettingsConfig : BaseState(), PersistentStateComponent<AtomSettingsCon
     return accentColorFromTheme
   }
 
-  //endregion
+  // endregion
 
-  //region Themed Color
+  // region Themed Color
 
   /** Get current themed color. */
   fun getCurrentThemedColor(): String {
     if (isThemedColorEnabled) return themedColor ?: themedColorFromTheme
     return themedColorFromTheme
   }
-  //endregion
+  // endregion
 
-  //region Custom Icon size
+  // region Custom Icon size
 
   /** Toggle custom icon size. */
   fun toggleHasCustomIconSize() {
     hasCustomIconSize = !hasCustomIconSize
   }
-  //endregion
+  // endregion
 
-  //region Custom Line Height
+  // region Custom Line Height
 
   /** Toggle custom line height. */
   fun toggleHasCustomLineHeight() {
     hasCustomLineHeight = !hasCustomLineHeight
   }
-  //endregion
+  // endregion
 
   companion object {
     /** Default Icon Size. */

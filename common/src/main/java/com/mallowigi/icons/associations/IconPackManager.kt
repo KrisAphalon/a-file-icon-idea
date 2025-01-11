@@ -34,17 +34,18 @@ class IconPackManager {
   /** Whether the icon pack is enabled. */
   fun hasIconPack(iconPack: IconPack?): Boolean {
     return when (iconPack) {
-      IconPack.DEFAULT -> return true
-      IconPack.ANGULAR -> AtomSettingsConfig.instance.isUseAngularIcons
+      IconPack.DEFAULT  -> return true
+      IconPack.ANGULAR  -> AtomSettingsConfig.instance.isUseAngularIcons
       IconPack.ANGULAR2 -> AtomSettingsConfig.instance.isUseAngular2Icons
-      IconPack.NEST -> AtomSettingsConfig.instance.isUseNestIcons
-      IconPack.REDUX -> AtomSettingsConfig.instance.isUseReduxIcons
-      IconPack.NEXTJS -> AtomSettingsConfig.instance.isUseNextIcons
-      IconPack.NGRX -> AtomSettingsConfig.instance.isUseNgRxIcons
-      IconPack.RAILS -> AtomSettingsConfig.instance.isUseRailsIcons
-      IconPack.RECOIL -> AtomSettingsConfig.instance.isUseRecoilIcons
-      IconPack.TESTS -> AtomSettingsConfig.instance.isUseTestsIcons
-      else -> return true
+      IconPack.NEST     -> AtomSettingsConfig.instance.isUseNestIcons
+      IconPack.REDUX    -> AtomSettingsConfig.instance.isUseReduxIcons
+      IconPack.NEXTJS   -> AtomSettingsConfig.instance.isUseNextIcons
+      IconPack.NGRX     -> AtomSettingsConfig.instance.isUseNgRxIcons
+      IconPack.CSS      -> AtomSettingsConfig.instance.isUseCssIcons
+      IconPack.RAILS    -> AtomSettingsConfig.instance.isUseRailsIcons
+      IconPack.RECOIL   -> AtomSettingsConfig.instance.isUseRecoilIcons
+      IconPack.TESTS    -> AtomSettingsConfig.instance.isUseTestsIcons
+      else              -> return true
     }
   }
 

@@ -82,7 +82,10 @@ object AtomIcons {
    * @param path absolute path to the icon
    * @return the icon. must not be null
    */
-  internal fun load(@NonNls path: String): Icon = IconLoader.findIcon(toCanonicalPath(path), AtomIcons.javaClass)!!
+  internal fun load(
+    @NonNls
+    path: String
+  ): Icon = IconLoader.findIcon(toCanonicalPath(path), AtomIcons.javaClass)!!
 
   /**
    * Tries to load a svg icon
@@ -120,8 +123,8 @@ object AtomIcons {
    */
   fun getLayeredIcon(icon: Icon, virtualFile: VirtualFile): Icon = when {
     virtualFile.`is`(VFileProperty.SYMLINK) -> LayeredIconService.create(icon, AllIcons.Nodes.Symlink)
-    !virtualFile.isWritable -> LayeredIconService.create(icon, AllIcons.Nodes.Locked)
-    else -> icon
+    !virtualFile.isWritable                 -> LayeredIconService.create(icon, AllIcons.Nodes.Locked)
+    else                                    -> icon
   }
 
   object Settings {
@@ -149,6 +152,7 @@ object AtomIcons {
     val NGRX: Icon = load("/settings/ngrx.svg")
     val NEXTJS: Icon = load("/settings/nextjs.svg")
     val RECOIL: Icon = load("/settings/recoil.svg")
+    val CSS: Icon = load("/settings/css.svg")
     val TESTS: Icon = load("/settings/tests.svg")
   }
 

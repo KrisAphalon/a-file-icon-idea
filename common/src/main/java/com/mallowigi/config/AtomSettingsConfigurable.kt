@@ -220,6 +220,16 @@ class AtomSettingsConfigurable : BoundSearchableConfigurable(
           )
 
           row {
+            icon(AtomIcons.Settings.CSS)
+              .gap(RightGap.SMALL)
+            checkBox(message("SettingsForm.useCssIcon.checkbox"))
+              .bindSelected(settings::isUseCssIcons)
+              .enabledIf(fileIconsCheckbox.selected)
+              .gap(RightGap.SMALL)
+              .comment(message("SettingsForm.useCssIcon.tooltip"))
+          }
+
+          row {
             icon(AtomIcons.Settings.RECOIL)
               .gap(RightGap.SMALL)
             checkBox(message("SettingsForm.useRecoilIcons.checkbox"))

@@ -35,6 +35,9 @@ enum class IconPack {
   /** Angular2. */
   ANGULAR2,
 
+  /** New CSS Icon */
+  CSS,
+
   /** Nest. */
   NEST,
 
