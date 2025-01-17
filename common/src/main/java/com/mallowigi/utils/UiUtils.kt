@@ -43,6 +43,10 @@ import com.mallowigi.config.AtomSettingsConfig
 import com.mallowigi.icons.associations.FileAssociationsIndex
 import javax.swing.UIManager
 
+const val IMAGE_ICON_PLUGIN = "com.mallowigi.imageicon"
+const val ICON_VIEWER_PLUGIN = "lermitage.intellij.iconviewer"
+val ICON_PLUGINS = setOf(IMAGE_ICON_PLUGIN, ICON_VIEWER_PLUGIN)
+
 /** Refresh. */
 fun refresh(project: Project?) {
   if (project != null) {
@@ -90,9 +94,9 @@ fun replaceArrowIcons() {
 fun getAccentFromTheme(): String {
   val namedKey = when (LafManager.getInstance().currentUIThemeLookAndFeel?.name) {
     "IntelliJ Light" -> "ActionButton.focusedBorderColor"
-    "Light" -> "ActionButton.focusedBorderColor"
-    "Darcula" -> "Button.select"
-    else -> "Link.activeForeground"
+    "Light"          -> "ActionButton.focusedBorderColor"
+    "Darcula"        -> "Button.select"
+    else             -> "Link.activeForeground"
   }
 
   val namedColor = JBColor.namedColor(
