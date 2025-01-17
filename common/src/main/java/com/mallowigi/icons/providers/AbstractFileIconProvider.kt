@@ -34,7 +34,6 @@ import com.intellij.util.indexing.FileBasedIndex
 import com.mallowigi.icons.associations.Association
 import com.mallowigi.icons.associations.Associations
 import com.mallowigi.icons.associations.FileAssociationsIndex
-import com.mallowigi.icons.associations.RegexAssociation
 import com.mallowigi.models.FileInfo
 import com.mallowigi.models.IconType
 import com.mallowigi.models.VirtualFileInfo
@@ -51,7 +50,7 @@ abstract class AbstractFileIconProvider : IconProvider(), DumbAware {
   override fun getIcon(element: PsiElement, flags: Int): Icon? = when {
     isNotApplicable() -> null
     isOfType(element) -> findIcon(element)
-    else -> null
+    else              -> null
   }
 
   /**
@@ -78,19 +77,17 @@ abstract class AbstractFileIconProvider : IconProvider(), DumbAware {
 
   /** Finds and retrieves the first matching association for the given file within the specified project scope. */
   private fun findAssociation(file: FileInfo, project: Project): Association? {
-    val fileBasedIndex = FileBasedIndex.getInstance()
-    var association: RegexAssociation? = null
+    if (getType() == IconType.FOLDER) return getSource().findAssociation(file)
+    if (CACHE.containsKey(file.path)) return CACHE[file.path]
 
-    fileBasedIndex.processValues(
+    val fileBasedIndex = FileBasedIndex.getInstance()
+    val associations = fileBasedIndex.getValues(
       FileAssociationsIndex.NAME,
       file.path,
-      null,
-      { _, value ->
-        association = value
-        false
-      },
       GlobalSearchScope.projectScope(project)
     )
+    val association = associations.firstOrNull()
+    if (association != null) CACHE[file.path] = association
     return association
   }
 
@@ -133,4 +130,8 @@ abstract class AbstractFileIconProvider : IconProvider(), DumbAware {
    * @return true if default assoc provider
    */
   abstract fun isDefault(): Boolean
+
+  companion object {
+    private val CACHE: MutableMap<String, Association> = mutableMapOf()
+  }
 }

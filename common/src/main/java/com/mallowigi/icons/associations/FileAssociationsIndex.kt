@@ -80,7 +80,7 @@ class FileAssociationsIndex : FileBasedIndexExtension<String, RegexAssociation>(
 
   override fun getInputFilter(): FileBasedIndex.InputFilter = myInputFilter
 
-  override fun dependsOnFileContent(): Boolean = false
+  override fun dependsOnFileContent(): Boolean = true
 
   override fun getIndexer(): DataIndexer<String, RegexAssociation, FileContent> = myIndexer
 
@@ -90,36 +90,34 @@ class FileAssociationsIndex : FileBasedIndexExtension<String, RegexAssociation>(
 
   override fun getVersion(): Int = VERSION
 
-  override fun indexDirectories(): Boolean = true
+  override fun indexDirectories(): Boolean = false
 
   internal class FileAssociationsIndexer : DataIndexer<String, RegexAssociation, FileContent> {
-    override fun map(inputData: FileContent): MutableMap<String, RegexAssociation> {
+    override fun map(inputData: FileContent): Map<String, RegexAssociation> {
       val file = inputData.file
       val path = file.path
       val fileInfo = VirtualFileInfo(file)
       val isFolder = file.isDirectory
 
       when {
-        isFolder && !AtomSettingsConfig.instance.isEnabledDirectories -> return mutableMapOf()
-        !isFolder && !AtomSettingsConfig.instance.isEnabledIcons -> return mutableMapOf()
+        // isFolder && !AtomSettingsConfig.instance.isEnabledDirectories -> return emptyMap()
+        !isFolder && !AtomSettingsConfig.instance.isEnabledIcons -> return emptyMap()
 
         // Find association for the given path
-        else -> {
+        else                                                     -> {
           val fileAssociations = AtomSelectConfig.instance.selectedFileAssociations
-          val folderAssociations = AtomSelectConfig.instance.selectedFolderAssociations
+          // val folderAssociations = AtomSelectConfig.instance.selectedFolderAssociations
 
-          val map = mutableMapOf<String, RegexAssociation>()
           // Find association for the given path
           val association = when {
-            isFolder -> folderAssociations.findAssociation(fileInfo)
+            // isFolder -> folderAssociations.findAssociation(fileInfo)
             else -> fileAssociations.findAssociation(fileInfo)
           }
 
           if (association != null && association is RegexAssociation) {
-            map[path] = association
+            return mapOf(path to association)
           }
-
-          return map
+          return emptyMap()
         }
       }
     }
