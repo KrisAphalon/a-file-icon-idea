@@ -35,7 +35,7 @@ class OldToolbarGroup : DefaultActionGroup() {
       val actionManager = event?.actionManager ?: return emptyArray()
       val mainToolBar = getActionGroup(actionManager) ?: return emptyArray()
 
-      children = mainToolBar.getChildren(null)
+      children = mainToolBar.getChildren(event)
     }
 
     return children
