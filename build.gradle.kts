@@ -28,6 +28,9 @@ import kotlinx.coroutines.runBlocking
 import org.jetbrains.changelog.Changelog
 import org.jetbrains.changelog.markdownToHTML
 import org.jetbrains.intellij.platform.gradle.extensions.intellijPlatform
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
+import org.jlleitschuh.gradle.ktlint.tasks.KtLintCheckTask
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import java.net.HttpURLConnection
@@ -140,15 +143,19 @@ allprojects {
         sourceCompatibility = it
         targetCompatibility = it
       }
-      //withType<KotlinCompile> {
-      //  compilerOptions {
-      //    jvmTarget.set(it)
-      //  }
-      //}
+      withType<KotlinJvmCompile> {
+        compilerOptions {
+          jvmTarget.set(JvmTarget.fromTarget(it))
+        }
+      }
     }
 
     withType<Copy> {
       duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    }
+
+    withType<KtLintCheckTask> {
+      enabled = false
     }
 
     sourceSets {
@@ -171,11 +178,9 @@ intellijPlatform {
     id = pluginID
     name = pluginName
     version = pluginVersion
-    //description = pluginDescription
+    // description = pluginDescription
 
-    //Get the latest available change notes from the changelog file
-    val changelog = project.changelog // local variable for configuration cache compatibility
-    // Get the latest available change notes from the changelog file
+    val changelog = project.changelog
     changeNotes.set(provider {
       with(changelog) {
         renderItem(
