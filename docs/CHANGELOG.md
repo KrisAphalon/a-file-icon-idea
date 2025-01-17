@@ -2,6 +2,48 @@
 
 ----
 
+## 101.0.0 (10.1.0)
+
+### Features
+
+- Add an option in the settings to disable indexing in the case it causes the IDE to crash!
+- **New Icon Pack**: CSS (New Icon)
+
+### Fixes
+
+- Fix infinite indexing loop
+- Add a caching map to avoid recalculating indexed icons
+- Trying to fix the rare error of `Class initialization must not depend on services`
+- Support *Icon Viewer 2* plugin
+
+### Additions
+
+- *File Icons*:
+  - Ruff
+  - Stryker
+  - Wrangler
+  - Beancount
+  - Keystatic
+  - Lyric
+  - Markdoc
+  - Nest Healthchecks
+  - Nest Fixtures
+  - ShadCN Config
+  - Copilot
+  - Stackblitz
+  - Taze
+  - Sway
+  - Wxt
+  - Zeabur
+  - C3
+  - Mise
+  - Textlint Ignore
+- *Folder Icons*:
+  - Liquibase
+  - Obsidian
+  - Trash
+  - Nx
+
 ## 100.0.0 (10.0.0)
 
 ### Features
