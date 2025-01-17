@@ -31,6 +31,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.search.GlobalSearchScope
 import com.intellij.psi.util.PsiUtilCore
 import com.intellij.util.indexing.FileBasedIndex
+import com.mallowigi.config.AtomSettingsConfig
 import com.mallowigi.icons.associations.Association
 import com.mallowigi.icons.associations.Associations
 import com.mallowigi.icons.associations.FileAssociationsIndex
@@ -76,19 +77,23 @@ abstract class AbstractFileIconProvider : IconProvider(), DumbAware {
     CacheIconProvider.instance.iconCache.getOrPut(association.icon) { getIcon(association.icon) }
 
   /** Finds and retrieves the first matching association for the given file within the specified project scope. */
-  private fun findAssociation(file: FileInfo, project: Project): Association? {
-    if (getType() == IconType.FOLDER) return getSource().findAssociation(file)
-    if (CACHE.containsKey(file.path)) return CACHE[file.path]
+  private fun findAssociation(file: FileInfo, project: Project): Association? = when {
+    getType() == IconType.FOLDER                -> getSource().findAssociation(file)
+    AtomSettingsConfig.instance.disableIndexing -> getSource().findAssociation(file)
+    CACHE.containsKey(file.path)                -> CACHE[file.path]
+    else                                        -> {
+      val fileBasedIndex = FileBasedIndex.getInstance()
+      val associations = fileBasedIndex.getValues(
+        FileAssociationsIndex.NAME,
+        file.path,
+        GlobalSearchScope.projectScope(project)
+      )
 
-    val fileBasedIndex = FileBasedIndex.getInstance()
-    val associations = fileBasedIndex.getValues(
-      FileAssociationsIndex.NAME,
-      file.path,
-      GlobalSearchScope.projectScope(project)
-    )
-    val association = associations.firstOrNull()
-    if (association != null) CACHE[file.path] = association
-    return association
+      val association = associations.firstOrNull()
+      if (association != null) CACHE[file.path] = association
+
+      association
+    }
   }
 
   /**

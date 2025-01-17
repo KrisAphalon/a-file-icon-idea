@@ -38,7 +38,6 @@
   <resource-bundle>messages.AtomFileIconsBundle</resource-bundle>
 
   <extensions defaultExtensionNs="com.intellij">
-    <applicationService serviceImplementation="com.mallowigi.config.AtomSettingsConfig"/>
     <!-- New Settings -->
     <applicationConfigurable instance="com.mallowigi.config.AtomHomeConfigurable"
                              id="AtomHomeConfigurable"
@@ -50,7 +49,6 @@
                              id="AtomSettingsConfigurable"
                              groupId="appearance"/>
 
-    <applicationService serviceImplementation="com.mallowigi.config.select.AtomSelectConfig"/>
     <applicationConfigurable instance="com.mallowigi.config.select.AtomSelectConfigurable"
                              key="AtomSelectForm.title"
                              groupId="appearance" dynamic="true"

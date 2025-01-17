@@ -39,6 +39,7 @@ import com.mallowigi.utils.getValue
   storages = [Storage("a-file-icons.xml")],
   category = SettingsCategory.UI
 )
+@Service(Service.Level.APP)
 class AtomSettingsConfig : BaseState(), PersistentStateComponent<AtomSettingsConfig> {
   private var firstRun: Boolean = true
 
@@ -147,6 +148,9 @@ class AtomSettingsConfig : BaseState(), PersistentStateComponent<AtomSettingsCon
   /** Whether low power mode is enabled. */
   var isLowPowerMode: Boolean by property(true)
 
+  /** Disable indexing for the case it causes the IDE to crash */
+  var disableIndexing: Boolean by property(false)
+
   /** Is new icons enabeld. */
   var isNewIconsEnabeld: Boolean by property(false)
 
@@ -182,6 +186,7 @@ class AtomSettingsConfig : BaseState(), PersistentStateComponent<AtomSettingsCon
     arrowsStyle = ArrowsStyles.MATERIAL
     customIconSize = DEFAULT_ICON_SIZE
     customLineHeight = DEFAULT_LINE_HEIGHT
+    disableIndexing = false
     hasCustomIconSize = false
     hasCustomLineHeight = false
     fixActionButtonsColor = false

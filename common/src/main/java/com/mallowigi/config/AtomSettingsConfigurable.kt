@@ -413,6 +413,13 @@ class AtomSettingsConfigurable : BoundSearchableConfigurable(
       }.rowComment(message("SettingsForm.lowPowerSwitch.toolTipText"))
 
       row {
+        label(message("SettingsForm.disableIndexing.text"))
+          .gap(RightGap.SMALL)
+        cell(OnOffButton())
+          .bindSelected(settings::disableIndexing)
+      }.rowComment(message("SettingsForm.disableIndexing.toolTipText"))
+
+      row {
         button(message("SettingsForm.resetDefaultsButton.text")) { resetSettings() }
           .resizableColumn()
           .align(AlignX.RIGHT)
