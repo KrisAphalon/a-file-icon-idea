@@ -37,7 +37,7 @@ import java.util.*
 
 /** Configuration for [SelectedAssociations]. */
 @State(
-  name = "Atom Icons Custom Associations",
+  name = "Atom Icon Selections Config",
   storages = [Storage("atom-icon-associations.xml")],
   category = SettingsCategory.UI
 )
