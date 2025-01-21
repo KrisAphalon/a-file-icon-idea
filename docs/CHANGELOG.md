@@ -2,6 +2,12 @@
 
 ----
 
+## 101.0.1 (10.1.1)
+
+### Fixes
+
+- Fix custom associations not loaded
+
 ## 101.0.0 (10.1.0)
 
 ### Features
