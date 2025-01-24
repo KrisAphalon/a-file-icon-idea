@@ -2,7 +2,19 @@
 
 ----
 
-## 101.0.1 (10.1.1)
+## 101.2.0 (10.1.2)
+
+### Fixes
+
+- Fix `Reindexing icons` action not working since last update
+- Fix metadata icon too large
+
+### Additions
+
+- New Icons: Typst and ePub
+- Change Unity icons
+
+## 101.1.0 (10.1.1)
 
 ### Fixes
 
