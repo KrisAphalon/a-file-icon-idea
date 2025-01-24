@@ -138,5 +138,9 @@ abstract class AbstractFileIconProvider : IconProvider(), DumbAware {
 
   companion object {
     private val CACHE: MutableMap<String, Association> = mutableMapOf()
+
+    fun clearCache() {
+      CACHE.clear()
+    }
   }
 }

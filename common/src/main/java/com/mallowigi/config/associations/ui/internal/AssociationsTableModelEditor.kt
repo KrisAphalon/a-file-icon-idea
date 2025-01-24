@@ -338,7 +338,9 @@ class AssociationsTableModelEditor(
      * @param rowIndex row number
      * @param columnIndex column number
      */
-    override fun setValueAt(aValue: Any, rowIndex: Int, columnIndex: Int) {
+    override fun setValueAt(aValue: Any?, rowIndex: Int, columnIndex: Int) {
+      if (aValue == null) return
+
       if (rowIndex < rowCount) {
         val columnInfo = columnInfos[columnIndex]
         val item = getItem(rowIndex)
@@ -346,7 +348,7 @@ class AssociationsTableModelEditor(
 
         val comparator = when (columnInfo.columnClass) {
           String::class.java -> Comparing.strEqual(oldValue as? String, aValue as String)
-          else -> Comparing.equal(oldValue, aValue)
+          else               -> Comparing.equal(oldValue, aValue)
         }
 
         if (!comparator) {
@@ -368,24 +370,24 @@ class AssociationsTableModelEditor(
       if (modelIndex < 0 || modelIndex >= table.rowCount) return false
 
       return when (type) {
-        IconType.FILE -> when (column) {
+        IconType.FILE        -> when (column) {
           Columns.ICONCOLOR.index -> setIconColor(modelIndex)
-          else -> false
+          else                    -> false
         }
 
-        IconType.FOLDER -> when (column) {
-          Columns.FOLDERCOLOR.index -> setFolderColor(modelIndex)
+        IconType.FOLDER      -> when (column) {
+          Columns.FOLDERCOLOR.index     -> setFolderColor(modelIndex)
           Columns.FOLDERICONCOLOR.index -> setFolderIconColor(modelIndex)
-          else -> false
+          else                          -> false
         }
 
         IconType.FOLDER_OPEN -> when (column) {
-          Columns.FOLDERCOLOR.index -> setFolderColor(modelIndex)
+          Columns.FOLDERCOLOR.index     -> setFolderColor(modelIndex)
           Columns.FOLDERICONCOLOR.index -> setFolderIconColor(modelIndex)
-          else -> false
+          else                          -> false
         }
 
-        IconType.PSI -> false
+        IconType.PSI         -> false
       }
     }
 

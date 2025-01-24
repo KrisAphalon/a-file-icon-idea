@@ -41,6 +41,7 @@ import com.intellij.util.ui.UIUtil
 import com.mallowigi.config.AtomSettingsBundle
 import com.mallowigi.config.AtomSettingsConfig
 import com.mallowigi.icons.associations.FileAssociationsIndex
+import com.mallowigi.icons.providers.AbstractFileIconProvider
 import javax.swing.UIManager
 
 const val IMAGE_ICON_PLUGIN = "com.mallowigi.imageicon"
@@ -120,4 +121,5 @@ fun isPluginEnabled(pluginId: String) = PluginManagerCore.getPlugin(PluginId.get
 
 fun refreshIndex() {
   FileBasedIndex.getInstance().requestRebuild(FileAssociationsIndex.NAME)
+  AbstractFileIconProvider.clearCache()
 }
