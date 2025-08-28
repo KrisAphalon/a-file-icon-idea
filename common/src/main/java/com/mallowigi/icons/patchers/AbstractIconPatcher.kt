@@ -86,8 +86,8 @@ abstract class AbstractIconPatcher : IconPathPatcher() {
   }
 
   /** Check whether a png version of a resource exists. */
-  private fun getPNG(path: String): URL? {
-    val replacement = SVG.replace(getReplacement(path), ".png") // NON-NLS
+  private fun getPNG(replacementPath: String): URL? {
+    val replacement = SVG.replace(replacementPath, ".png") // NON-NLS
     return javaClass.getResource("/$replacement")
   }
 
@@ -99,22 +99,39 @@ abstract class AbstractIconPatcher : IconPathPatcher() {
    * @return
    */
   @Suppress("kotlin:S1871", "HardCodedStringLiteral")
-  private fun getPatchedPath(path: String): String? = when {
-    !enabled -> null
-    path.contains("expui/gutter") -> getArrowReplacement(path)
-    CACHE.containsKey(path) -> CACHE[path]
-    // First try the svg version of the resource
-    getSVG(path) != null -> {
-      CACHE[path] = getReplacement(path)
-      CACHE[path]
-    }
-    // Then try the png version
-    getPNG(path) != null -> {
-      CACHE[path] = getReplacement(path)
-      CACHE[path]
+  private fun getPatchedPath(path: String): String? {
+    if (!enabled) {
+      return null
     }
 
-    else -> null
+    if (path.contains("expui/gutter")) {
+      return this.getArrowReplacement(path)
+    }
+
+    if (CACHE.containsKey(path)) {
+      return CACHE[path]
+    }
+
+    val replacementPath = getReplacement(path)
+
+    if (NULL_CACHE.contains(replacementPath)) {
+      return null
+    }
+
+    // First try the svg version of the resource
+    if (getSVG(replacementPath) != null) {
+      CACHE[path] = replacementPath
+      return CACHE[path]
+    }
+
+    // Then try the png version
+    if (getPNG(replacementPath) != null) {
+      CACHE[path] = replacementPath
+      return CACHE[path]
+    }
+
+    NULL_CACHE.add(replacementPath)
+    return null
   }
 
   private fun getArrowReplacement(path: String): String? {
@@ -139,14 +156,15 @@ abstract class AbstractIconPatcher : IconPathPatcher() {
   }
 
   /** Check whether a svg version of a resource exists. */
-  private fun getSVG(path: String): URL? {
-    val svgFile = PNG.replace(getReplacement(path), ".svg") // NON-NLS
+  private fun getSVG(replacementPath: String): URL? {
+    val svgFile = PNG.replace(replacementPath, ".svg") // NON-NLS
     return javaClass.getResource("/$svgFile")
   }
 
   companion object {
     private val CACHE: MutableMap<String, String?> = HashMap(100)
     private val CL_CACHE: MutableMap<String, ClassLoader?> = HashMap(100)
+    private val NULL_CACHE: MutableSet<String> = HashSet(100)
     private val PNG = ".png".toRegex(RegexOption.LITERAL)
     private val SVG = ".svg".toRegex(RegexOption.LITERAL)
     private val GIF = ".gif".toRegex(RegexOption.LITERAL)
@@ -159,6 +177,7 @@ abstract class AbstractIconPatcher : IconPathPatcher() {
     fun clearCache() {
       CACHE.clear()
       CL_CACHE.clear()
+      NULL_CACHE.clear()
     }
   }
 
