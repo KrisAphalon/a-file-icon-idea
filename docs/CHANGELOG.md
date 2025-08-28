@@ -2,6 +2,13 @@
 
 ----
 
+## 101.2.1 (10.1.3)
+
+### Fixes
+
+- Performance Improvement by using cache for known non-existent resources
+
+
 ## 101.2.0 (10.1.2)
 
 ### Fixes
